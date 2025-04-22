@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YourChannel - Contact Us</title>
+    <!-- Bootstrap CSS for clean, responsive design -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons for consistent iconography -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Poppins font for modern typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">YourChannel</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="search-bar mx-auto">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search videos, streams, or creators" aria-label="Search content">
+                        <button class="btn btn-primary" type="button" onclick="searchContent()" aria-label="Search"><i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html" aria-current="page"><i class="bi bi-box-arrow-in-right"></i> Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html"><i class="bi bi-envelope"></i> Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="yourchannel.html"><i class="bi bi-play-btn"></i> YourChannel</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html"><i class="bi bi-person"></i> Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="wallet.html"><i class="bi bi-wallet2"></i> Wallet</a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Intro Section -->
+    <br><br><section class="intro-section text-center">
+        <div class="intro-content">
+            <br>
+            <h1 style="text-align: center;">We're Here to Help</h1>
+            <p style="text-align: center;">Reach out to YourChannel’s support team for assistance with streaming, YourCoin, or anything else!</p>
+        </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section class="contact-section">
+        <div class="container">
+            <div class="contact-card mx-auto">
+                <h2 class="text-center mb-4">Contact Us</h2>
+                <form id="contactForm" action="submit_form.php" method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter your full name" required aria-describedby="nameHelp">
+                        <div id="nameHelp" class="form-text">Your name helps us address you personally.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email address" required aria-describedby="emailHelp">
+                        <div id="emailHelp" class="form-text">We’ll use this to respond to your inquiry.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Phone Number (Optional)</label>
+                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter your phone number" aria-describedby="phoneHelp">
+                        <div id="phoneHelp" class="form-text">Optional, for phone-based support if preferred.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">Subject</label>
+                        <input type="text" class="form-control" id="subject" name="subject" placeholder="Enter the subject" required aria-describedby="subjectHelp">
+                        <div id="subjectHelp" class="form-text">Briefly describe your issue or question.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message</label>
+                        <textarea class="form-control" id="message" name="message" rows="5" placeholder="Write your message here" required aria-describedby="messageHelp"></textarea>
+                        <div id="messageHelp" class="form-text">Provide details to help us assist you better.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="file" class="form-label">Attach File (Optional)</label>
+                        <input type="file" class="form-control" id="file" name="file" aria-describedby="fileHelp">
+                        <div id="fileHelp" class="form-text">Upload screenshots or documents if relevant.</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#confirmationModal">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Support Categories Table info -->
+    <br><br><section class="table-section">
+        <div class="container">
+            <h3 class="text-center mb-4">Support Categories</h3>
+            <p class="text-center mb-4">Choose the category that best matches your inquiry for faster assistance.</p>
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Category</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Response Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Technical Support</td>
+                        <td>Issues with streaming, video playback, or platform access.</td>
+                        <td>24-48 hours</td>
+                    </tr>
+                    <tr>
+                        <td>Billing</td>
+                        <td>Questions about payments, or yourCoin transactions.</td>
+                        <td>12-24 hours</td>
+                    </tr>
+                    <tr>
+                        <td>yourCoin</td>
+                        <td>Help with wallet, buying, selling, tipping, or yourCoin issues.</td>
+                        <td>48-72 hours</td>
+                    </tr>
+                    <tr>
+                        <td>General Inquiries</td>
+                        <td>Feedback, feature requests, or other questions.</td>
+                        <td>48-72 hours</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <br><br><section class="faq-section">
+        <div class="container">
+            <h2 class="text-center">Frequently Asked Questions</h2>
+            <p class="text-center mb-4">Find quick answers to common questions or contact us for more help.</p>
+            <div class="row g-4">
+                <div class="col-12 col-md-6">
+                    <div class="faq-card">
+                        <h3>Why can’t I stream my video?</h3>
+                        <p>Check your internet connection and ensure your browser is updated. Contact Technical Support with details for further assistance.</p>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="faq-card">
+                        <h3>How do I earn YourCoin?</h3>
+                        <p>Earn YourCoin through watch streaks, creator tips, or platform promotions. Check your Wallet for details.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Confirmation Modal for contacting  -->
+    <br><br><div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalLabel">Message Sent</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Thank you for contacting YourChannel! We’ll respond within the estimated time for your inquiry type.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- my footer -->
+    <br><br><footer class="footer">
+        <div class="container">
+            <p>© 2025 Skyler Spillers. All rights reserved.
+                <a href="contact.html">Contact Us</a> | 
+                <a href="#">Privacy Policy</a> | 
+                <a href="#">Terms of Service</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+</body>
+</html>

@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YourChannel - Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+    <!-- Custom styling for profile that cant be replace  with style sheet.-->
+    <style>
+        :root {
+            --primary-color: #ff0000;
+            --bg-color: #f9f9f9;
+            --card-bg: #ffffff;
+            --text-color: #030303;
+            --shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Reduced shadow */
+            --transition: all 0.3s ease;
+        }
+        .dark-mode {
+            --bg-color: #181818;
+            --card-bg: #282828;
+            --text-color: #ffffff;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            transition: var(--transition);
+        }
+        .navbar {
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+            padding: 0.5rem 1rem;
+            z-index: 1000;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        .search-bar {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .nav-link.active {
+            color: var(--primary-color) !important;
+            font-weight: 600;
+        }
+        .sidebar {
+            width: 240px;
+            position: fixed;
+            top: 56px;
+            bottom: 0;
+            left: 0;
+            background: var(--card-bg);
+            overflow-y: auto;
+            padding: 1rem;
+            box-shadow: var(--shadow);
+            transition: transform var(--transition);
+            z-index: 900;
+        }
+        .sidebar.collapsed {
+            transform: translateX(-100%);
+        }
+        .sidebar.active {
+            transform: translateX(0);
+        }
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .sidebar-item:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        .profile-header {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 56px;
+            z-index: 800;
+        }
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-color);
+        }
+        .banner-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+        .main-content {
+            margin-left: 240px;
+            padding: 2rem;
+            transition: margin-left var(--transition);
+        }
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            will-change: contents; /* Optimize rendering */
+        }
+        .content-card {
+            position: relative;
+            background: var(--card-bg);
+            border-radius: 8px; /* Reduced for performance */
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            contain: content; /* Contain rendering */
+            opacity: 1;
+        }
+        .content-card img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            display: block; /* Prevent layout shifts */
+            background: #ccc url('https://via.placeholder.com/320x180?text=Loading') center/cover;
+        }
+        .edit-btn, .delete-btn {
+            position: absolute;
+            top: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .edit-btn {
+            right: 50px;
+        }
+        .delete-btn {
+            right: 10px;
+        }
+        .edit-btn:hover, .delete-btn:hover {
+            background: var(--primary-color);
+        }
+        .filter-bar {
+            margin-bottom: 1rem;
+        }
+        .filter-btn, .sort-btn {
+            background: none;
+            border: none;
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+            transition: color 0.2s;
+        }
+        .filter-btn:hover, .sort-btn:hover {
+            color: var(--primary-color);
+        }
+        .filter-btn.active, .sort-btn.active {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+        .analytics-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+        .analytics-chart {
+            max-width: 100%;
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        .about-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+        .social-links a {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            color: var(--text-color);
+            transition: color 0.2s;
+        }
+        .social-links a:hover {
+            color: var(--primary-color);
+        }
+        .badge-achievement {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .infinite-scroll-spinner {
+            text-align: center;
+            padding: 1rem;
+            display: none;
+        }
+        .infinite-scroll-spinner.active {
+            display: block;
+        }
+        .load-more-btn {
+            display: block;
+            margin: 1rem auto;
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .load-more-btn:hover {
+            background: darken(var(--primary-color), 10%);
+        }
+        .modal-content {
+            border-radius: 12px;
+            background: var(--card-bg);
+        }
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .profile-header {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Nav Bar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">YourChannel</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="search-bar mx-auto">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search videos, streams, or creators" aria-label="Search content">
+                        <button class="btn btn-primary" type="button" onclick="searchContent()" aria-label="Search"><i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html" aria-current="page"><i class="bi bi-box-arrow-in-right"></i> Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html"><i class="bi bi-envelope"></i> Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="yourchannel.html"><i class="bi bi-play-btn"></i> YourChannel</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html"><i class="bi bi-person"></i> Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="wallet.html"><i class="bi bi-wallet2"></i> Wallet</a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar collapsed" id="sidebar">
+        <div class="wallet-info" onclick="window.location.href='wallet.html'" aria-label="View wallet details">
+            <i class="bi bi-wallet2 me-2"></i> Balance: <span id="walletBalance">100</span> YC
+        </div>
+        <div class="sidebar-item" onclick="switchTab('videosTab')">
+            <i class="bi bi-film me-2"></i> Videos
+        </div>
+        <div class="sidebar-item" onclick="switchTab('liveTab')">
+            <i class="bi bi-broadcast me-2"></i> Live
+        </div>
+        <div class="sidebar-item" onclick="switchTab('analyticsTab')">
+            <i class="bi bi-bar-chart me-2"></i> Analytics
+        </div>
+        <div class="sidebar-item" onclick="switchTab('aboutTab')">
+            <i class="bi bi-info-circle me-2"></i> About
+        </div>
+        <div class="sidebar-item" data-bs-toggle="modal" data-bs-target="#uploadVideoModal">
+            <i class="bi bi-upload me-2"></i> Upload Video
+        </div>
+        <div class="sidebar-item" data-bs-toggle="modal" data-bs-target="#goLiveModal">
+            <i class="bi bi-broadcast-pin me-2"></i> Go Live
+        </div>
+        <div class="sidebar-item" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+            <i class="bi bi-pencil me-2"></i> Edit Profile
+        </div>
+        <div class="sidebar-item" data-bs-toggle="modal" data-bs-target="#settingsModal">
+            <i class="bi bi-gear me-2"></i> Settings
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="banner-image" id="bannerImage"></div>
+            <div class="d-flex align-items-center flex-wrap">
+                <img src="https://via.placeholder.com/120?text=U" alt="Profile Picture" class="profile-pic me-3" id="profilePic">
+                <div class="me-3">
+                    <h2 id="usernameDisplay">SkylerBlueSpillers</h2>
+                    <p id="handleDisplay">@streamer123</p>
+                    <p><strong>Followers:</strong> <span id="followerCount">5,000,0000</span></p>
+                </div>
+                <div class="mt-2">
+                    <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#editProfileModal">Edit Profile</button>
+                    <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#uploadVideoModal">Upload Video</button>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#goLiveModal">Go Live</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs for my videos, lives, analytics, and prfile info -->
+        <ul class="nav nav-tabs mb-4" id="profileTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="videos-tab" data-bs-toggle="tab" data-bs-target="#videosTab" type="button" role="tab" aria-controls="videosTab" aria-selected="true">Videos</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="live-tab" data-bs-toggle="tab" data-bs-target="#liveTab" type="button" role="tab" aria-controls="liveTab" aria-selected="false">Live</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="analytics-tab" data-bs-toggle="tab" data-bs-target="#analyticsTab" type="button" role="tab" aria-controls="analyticsTab" aria-selected="false">Analytics</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="about-tab" data-bs-toggle="tab" data-bs-target="#aboutTab" type="button" role="tab" aria-controls="aboutTab" aria-selected="false">About</button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="profileTabContent">
+            <!-- Videos Tab -->
+            <div class="tab-pane fade show active" id="videosTab" role="tabpanel" aria-labelledby="videos-tab">
+                <div class="filter-bar">
+                    <button class="sort-btn active" onclick="sortContent('videosGrid', 'newest')" aria-label="Sort by newest">Newest</button>
+                    <button class="sort-btn" onclick="sortContent('videosGrid', 'popular')" aria-label="Sort by most viewed">Most Viewed</button>
+                </div>
+                <div class="content-grid" id="videosGrid"></div>
+                <div class="infinite-scroll-spinner">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <button class="load-more-btn" onclick="loadMore('videosGrid')">Load More</button>
+            </div>
+
+            <!-- Live Tab -->
+            <div class="tab-pane fade" id="liveTab" role="tabpanel" aria-labelledby="live-tab">
+                <div class="filter-bar">
+                    <button class="sort-btn active" onclick="sortContent('streamsGrid', 'newest')" aria-label="Sort by newest">Newest</button>
+                    <button class="sort-btn" onclick="sortContent('streamsGrid', 'popular')" aria-label="Sort by most viewed">Most Viewed</button>
+                </div>
+                <div class="content-grid" id="streamsGrid"></div>
+                <div class="infinite-scroll-spinner">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <button class="load-more-btn" onclick="loadMore('streamsGrid')">Load More</button>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div class="tab-pane fade" id="analyticsTab" role="tabpanel" aria-labelledby="analytics-tab">
+                <div class="analytics-card">
+                    <h3>Channel Analytics</h3>
+                    <div class="row text-center mb-4">
+                        <div class="col-md-3">
+                            <h5>Total Views</h5>
+                            <p id="totalViews">1,200</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h5>Total Likes</h5>
+                            <p id="totalLikes">300</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h5>Total Comments</h5>
+                            <p id="totalComments">150</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h5>Followers</h5>
+                            <p id="totalFollowers">500</p>
+                        </div>
+                    </div>
+                    <h4>YourCoin Tips Earned</h4>
+                    <h5>Total Tips: <span id="totalTips">70</span> YC</h5>
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Type</th>
+                                <th>Tips (YC)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tipsBreakdown"></tbody>
+                    </table>
+                    <h4 class="mt-4">Views Over Time</h4>
+                    <svg class="analytics-chart" width="100%" height="200" aria-label="Views over time chart">
+                        <rect x="10" y="150" width="50" height="50" fill="#ff0000" />
+                        <rect x="70" y="130" width="50" height="70" fill="#ff0000" />
+                        <rect x="130" y="110" width="50" height="90" fill="#ff0000" />
+                        <rect x="190" y="90" width="50" height="110" fill="#ff0000" />
+                        <rect x="250" y="120" width="50" height="80" fill="#ff0000" />
+                        <rect x="310" y="140" width="50" height="60" fill="#ff0000" />
+                        <rect x="370" y="160" width="50" height="40" fill="#ff0000" />
+                        <text x="10" y="180" font-size="12">Apr 10</text>
+                        <text x="70" y="180" font-size="12">Apr 11</text>
+                        <text x="130" y="180" font-size="12">Apr 12</text>
+                        <text x="190" y="180" font-size="12">Apr 13</text>
+                        <text x="250" y="180" font-size="12">Apr 14</text>
+                        <text x="310" y="180" font-size="12">Apr 15</text>
+                        <text x="370" y="180" font-size="12">Apr 16</text>
+                    </svg>
+                    <h4 class="mt-4">Top Videos</h4>
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Views</th>
+                                <th>Likes</th>
+                                <th>Comments</th>
+                            </tr>
+                        </thead>
+                        <tbody id="topVideos"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- About Tab -->
+            <div class="tab-pane fade" id="aboutTab" role="tabpanel" aria-labelledby="about-tab">
+                <div class="about-section">
+                    <h3>About <button class="btn btn-outline-primary btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#editProfileModal">Edit</button></h3>
+                    <p><strong>Channel Description</strong></p>
+                    <p id="bioDisplay">Passionate gamer and crypto enthusiast. Join my streams!</p>
+                    <p><strong>Details</strong></p>
+                    <p>Joined: April 1, 2023</p>
+                    <p>Total Views: <span id="aboutTotalViews">1,200</span></p>
+                    <p><strong>Social Links</strong></p>
+                    <div class="social-links">
+                        <a href="#" id="twitterLink" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+                        <a href="#" id="twitchLink" aria-label="Twitch"><i class="bi bi-twitch"></i></a>
+                        <a href="#" id="youtubeLink" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+                        <a href="#" id="discordLink" aria-label="Discord"><i class="bi bi-discord"></i></a>
+                    </div>
+                    <p><strong>Achievements</strong></p>
+                    <div>
+                        <span class="badge badge-achievement bg-success" data-bs-toggle="tooltip" title="Earned for 100 likes">100 Likes</span>
+                        <span class="badge badge-achievement bg-primary" data-bs-toggle="tooltip" title="Earned for first stream">First Stream</span>
+                    </div>
+                    <p class="mt-3"><strong>Followers:</strong> <span id="aboutFollowerCount">500</span> <button class="btn btn-link p-0" data-bs-toggle="modal" data-bs-target="#followersModal">View All</button></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="profileForm" onsubmit="saveProfile(); return false;">
+                        <div class="mb-3">
+                            <label for="channelName" class="form-label">Channel Name</label>
+                            <input type="text" class="form-control" id="channelName" required aria-label="Channel name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="handle" class="form-label">Handle</label>
+                            <input type="text" class="form-control" id="handle" required aria-label="Channel handle">
+                        </div>
+                        <div class="mb-3">
+                            <label for="bio" class="form-label">Bio</label>
+                            <textarea class="form-control" id="bio" rows="4" aria-label="Channel bio"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="profilePicInput" class="form-label">Profile Picture</label>
+                            <input type="file" class="form-control" id="profilePicInput" accept="image/*" aria-label="Upload profile picture">
+                            <img src="https://via.placeholder.com/120?text=U" alt="Profile Picture Preview" class="mt-2 rounded-circle" id="profilePicPreview" width="120" height="120">
+                        </div>
+                        <div class="mb-3">
+                            <label for="bannerInput" class="form-label">Banner Image</label>
+                            <input type="file" class="form-control" id="bannerInput" accept="image/*" aria-label="Upload banner image">
+                            <div class="banner-image mt-2" id="bannerPreview"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="twitter" class="form-label">Twitter URL</label>
+                            <input type="url" class="form-control" id="twitter" aria-label="Twitter URL">
+                        </div>
+                        <div class="mb-3">
+                            <label for="twitch" class="form-label">Twitch URL</label>
+                            <input type="url" class="form-control" id="twitch" aria-label="Twitch URL">
+                        </div>
+                        <div class="mb-3">
+                            <label for="youtube" class="form-label">YouTube URL</label>
+                            <input type="url" class="form-control" id="youtube" aria-label="YouTube URL">
+                        </div>
+                        <div class="mb-3">
+                            <label for="discord" class="form-label">Discord URL</label>
+                            <input type="url" class="form-control" id="discord" aria-label="Discord URL">
+                        </div>
+                        <div id="profileError" class="alert alert-danger d-none" role="alert"></div>
+                        <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Video Modal -->
+    <div class="modal fade" id="uploadVideoModal" tabindex="-1" aria-labelledby="uploadVideoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadVideoModalLabel">Upload YourChannel Video</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="uploadVideoForm" onsubmit="uploadVideo(); return false;">
+                        <div class="mb-3">
+                            <label for="videoTitle" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="videoTitle" required aria-label="Video title">
+                        </div>
+                        <div class="mb-3">
+                            <label for="videoDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="videoDescription" rows="4" aria-label="Video description"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="videoTags" class="form-label">Tags (comma-separated)</label>
+                            <input type="text" class="form-control" id="videoTags" aria-label="Video tags">
+                        </div>
+                        <div class="mb-3">
+                            <label for="videoCategory" class="form-label">Category</label>
+                            <select class="form-control" id="videoCategory" required aria-label="Video category">
+                                <option value="gaming">Gaming</option>
+                                <option value="crypto">Crypto</option>
+                                <option value="tutorial">Tutorial</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="videoFile" class="form-label">Video File</label>
+                            <input type="file" class="form-control" id="videoFile" accept="video/*" required aria-label="Upload video file">
+                        </div>
+                        <div class="mb-3">
+                            <label for="videoThumbnail" class="form-label">Thumbnail</label>
+                            <input type="file" class="form-control" id="videoThumbnail" accept="image/*" aria-label="Upload thumbnail">
+                            <img src="https://via.placeholder.com/320x180?text=Thumbnail" alt="Thumbnail Preview" class="mt-2" id="videoThumbnailPreview" width="100%">
+                        </div>
+                        <div id="uploadVideoError" class="alert alert-danger d-none" role="alert"></div>
+                        <button type="submit" class="btn btn-primary w-100">Upload Video</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Go Live Modal -->
+    <div class="modal fade" id="goLiveModal" tabindex="-1" aria-labelledby="goLiveModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="goLiveModalLabel">Go Live on YourChannel</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="goLiveForm" onsubmit="goLive(); return false;">
+                        <div class="mb-3">
+                            <label for="streamTitle" class="form-label">Stream Title</label>
+                            <input type="text" class="form-control" id="streamTitle" required aria-label="Stream title">
+                        </div>
+                        <div class="mb-3">
+                            <label for="streamDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="streamDescription" rows="4" aria-label="Stream description"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="streamTags" class="form-label">Tags (comma-separated)</label>
+                            <input type="text" class="form-control" id="streamTags" aria-label="Stream tags">
+                        </div>
+                        <div class="mb-3">
+                            <label for="streamCategory" class="form-label">Category</label>
+                            <select class="form-control" id="streamCategory" required aria-label="Stream category">
+                                <option value="gaming">Gaming</option>
+                                <option value="crypto">Crypto</option>
+                                <option value="tutorial">Tutorial</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="streamThumbnail" class="form-label">Thumbnail</label>
+                            <input type="file" class="form-control" id="streamThumbnail" accept="image/*" aria-label="Upload thumbnail">
+                            <img src="https://via.placeholder.com/320x180?text=Thumbnail" alt="Thumbnail Preview" class="mt-2" id="streamThumbnailPreview" width="100%">
+                        </div>
+                        <div class="mb-3">
+                            <label for="streamSchedule" class="form-label">Schedule (Optional)</label>
+                            <input type="datetime-local" class="form-control" id="streamSchedule" aria-label="Stream schedule">
+                        </div>
+                        <div id="goLiveError" class="alert alert-danger d-none" role="alert"></div>
+                        <button type="submit" class="btn btn-primary w-100">Go Live</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Video Modal -->
+    <div class="modal fade" id="editVideoModal" tabindex="-1" aria-labelledby="editVideoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editVideoModalLabel">Edit Video</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editVideoForm" onsubmit="saveVideo(); return false;">
+                        <input type="hidden" id="editVideoId">
+                        <div class="mb-3">
+                            <label for="editVideoTitle" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="editVideoTitle" required aria-label="Video title">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editVideoDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="editVideoDescription" rows="4" aria-label="Video description"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editVideoTags" class="form-label">Tags (comma-separated)</label>
+                            <input type="text" class="form-control" id="editVideoTags" aria-label="Video tags">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editVideoCategory" class="form-label">Category</label>
+                            <select class="form-control" id="editVideoCategory" required aria-label="Video category">
+                                <option value="gaming">Gaming</option>
+                                <option value="crypto">Crypto</option>
+                                <option value="tutorial">Tutorial</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editVideoThumbnail" class="form-label">Thumbnail</label>
+                            <input type="file" class="form-control" id="editVideoThumbnail" accept="image/*" aria-label="Upload new thumbnail">
+                            <img src="" alt="Thumbnail Preview" class="mt-2" id="editVideoThumbnailPreview" width="100%">
+                        </div>
+                        <div id="editVideoError" class="alert alert-danger d-none" role="alert"></div>
+                        <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Stream Modal -->
+    <div class="modal fade" id="editStreamModal" tabindex="-1" aria-labelledby="editStreamModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editStreamModalLabel">Edit Stream</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editStreamForm" onsubmit="saveStream(); return false;">
+                        <input type="hidden" id="editStreamId">
+                        <div class="mb-3">
+                            <label for="editStreamTitle" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="editStreamTitle" required aria-label="Stream title">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editStreamDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="editStreamDescription" rows="4" aria-label="Stream description"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editStreamTags" class="form-label">Tags (comma-separated)</label>
+                            <input type="text" class="form-control" id="editStreamTags" aria-label="Stream tags">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editStreamCategory" class="form-label">Category</label>
+                            <select class="form-control" id="editStreamCategory" required aria-label="Stream category">
+                                <option value="gaming">Gaming</option>
+                                <option value="crypto">Crypto</option>
+                                <option value="tutorial">Tutorial</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editStreamThumbnail" class="form-label">Thumbnail</label>
+                            <input type="file" class="form-control" id="editStreamThumbnail" accept="image/*" aria-label="Upload new thumbnail">
+                            <img src="" alt="Thumbnail Preview" class="mt-2" id="editStreamThumbnailPreview" width="100%">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editStreamSchedule" class="form-label">Schedule (Optional)</label>
+                            <input type="datetime-local" class="form-control" id="editStreamSchedule" aria-label="Stream schedule">
+                        </div>
+                        <div id="editStreamError" class="alert alert-danger d-none" role="alert"></div>
+                        <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Followers Modal -->
+    <div class="modal fade" id="followersModal" tabindex="-1" aria-labelledby="followersModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="followersModalLabel">Followers</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="list-group">
+                        <li class="list-group-item">Follower 1</li>
+                        <li class="list-group-item">Follower 2</li>
+                        <li class="list-group-item">Follower 3</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="settingsModalLabel">Settings</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="settingsForm" onsubmit="saveSettings(); return false;">
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="publicProfile" aria-label="Public profile toggle">
+                                <label class="form-check-label" for="publicProfile">Public Profile</label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="emailNotifications" aria-label="Email notifications toggle">
+                                <label class="form-check-label" for="emailNotifications">Email Notifications</label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="moderateComments" aria-label="Moderate comments toggle">
+                                <label class="form-check-label" for="moderateComments">Moderate Comments</label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="language" class="form-label">Language</label>
+                            <select class="form-control" id="language" aria-label="Language selection">
+                                <option value="en">English</option>
+                                <option value="es">Spanish</option>
+                                <option value="fr">French</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Save Settings</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container for notfications -->
+    <div class="toast-container">
+        <div id="profileToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Notification</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body"></div>
+        </div>
+    </div>
+
+        <!-- my footer -->
+        <footer class="footer">
+            <div class="container">
+                <p>© 2025 Skyler Spillers. All rights reserved.
+                    <a href="contact.html">Contact Us</a> | 
+                    <a href="#">Privacy Policy</a> | 
+                    <a href="#">Terms of Service</a>
+                </p>
+            </div>
+        </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+</body>
+</html>

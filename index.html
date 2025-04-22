@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YourChannel - Welcome</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons  -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Poppins font  -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- External styles -->
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./script.js"></script>
+    <!-- Custom style that can't be done in style sheet-->
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #ff0000 0%, #e60000 100%);
+            color: #ffffff;
+            text-align: center;
+            padding: 4rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://via.placeholder.com/1920x1080?text=Stream+Background') no-repeat center/cover;
+            opacity: 0.2;
+            z-index: 0;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        .hero-content h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: fadeIn 1s ease-in;
+        }
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        .login-section {
+            padding: 3rem 1rem;
+            background: var(--bg-color);
+            display: flex;
+            justify-content: center;
+        }
+        .login-card, .register-card {
+            max-width: 400px;
+            width: 100%;
+            padding: 2rem;
+            border-radius: 12px;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: slideIn 0.5s ease-out;
+            min-height: 450px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .login-card:hover, .register-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+        .form-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .form-content .mb-3 {
+            margin-bottom: 1rem !important;
+        }
+        .form-footer {
+            text-align: center;
+            margin-top: auto;
+        }
+        .features-section {
+            padding: 4rem 1rem;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            text-align: center;
+        }
+        .features-section h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+        }
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: fadeIn 0.5s ease-in;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+        .feature-card i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            .hero-content p {
+                font-size: 1rem;
+            }
+            .login-section {
+                padding: 2rem 1rem;
+            }
+            .login-card, .register-card {
+                margin-bottom: 1.5rem;
+                min-height: auto;
+            }
+            .feature-card {
+                margin-bottom: 1.5rem;
+            }
+        }
+        @media (max-width: 576px) {
+            .features-section h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar . -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">YourChannel</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="search-bar mx-auto">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search videos, streams, or creators" aria-label="Search content">
+                        <button class="btn btn-primary" type="button" onclick="searchContent()" aria-label="Search"><i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html" aria-current="page"><i class="bi bi-box-arrow-in-right"></i> Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html"><i class="bi bi-envelope"></i> Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="yourchannel.html"><i class="bi bi-play-btn"></i> YourChannel</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html"><i class="bi bi-person"></i> Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="wallet.html"><i class="bi bi-wallet2"></i> Wallet</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section explaining the platfrom -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>Welcome to YourChannel</h1>
+            <p>Join the ultimate platform for live streaming, video sharing, and creator support with YourCoin rewards.</p>
+            <a href="#registerForm" class="btn btn-light btn-lg" role="button">Get Started Now</a>
+        </div>
+    </section>
+
+    <!-- Login and Register Section -->
+    <section class="login-section">
+        <div class="container">
+            <div class="row g-4 justify-content-center">
+                <!-- Login Card -->
+                <div class="col-lg-6">
+                    <div class="login-card">
+                        <div class="form-content">
+                            <h2 class="text-center mb-4">Login to YourChannel</h2>
+                            <form id="loginForm" action="/login" method="POST">
+                                <div class="mb-3">
+                                    <label for="loginEmail" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="loginEmail" name="email" placeholder="Enter your email" required aria-describedby="loginEmailHelp">
+                                    <div id="loginEmailHelp" class="form-text">We'll never share your email.</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="loginPassword" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="loginPassword" name="password" placeholder="Enter your password" required>
+                                </div>
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe">
+                                    <label class="form-check-label" for="rememberMe">Remember Me</label>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Login</button>
+                            </form>
+                        </div>
+                        <div class="form-footer">
+                            <p><a href="#" class="text-muted">Forgot Password?</a></p>
+                            <p>Don't have an account? <a href="#registerForm" class="text-primary">Sign Up</a></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Register Card -->
+                <div class="col-lg-6">
+                    <div class="register-card">
+                        <div class="form-content">
+                            <h2 class="text-center mb-4">Sign Up for YourChannel</h2>
+                            <form id="registerForm" action="/signup" method="POST">
+                                <div class="mb-3">
+                                    <label for="registerEmail" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="registerEmail" name="email" placeholder="Enter your email" required aria-describedby="registerEmailHelp">
+                                    <div id="registerEmailHelp" class="form-text">We'll never share your email.</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="registerPassword" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="registerPassword" name="password" placeholder="Create a password" required aria-describedby="passwordHelp">
+                                    <div id="passwordHelp" class="form-text">Use at least 8 characters.</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <h2>Why Choose YourChannel?</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <i class="bi bi-broadcast"></i>
+                        <h3>Live Streaming</h3>
+                        <p>Stream your passion in real-time and connect with fans worldwide. Engage with interactive comments and reactions.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <i class="bi bi-coin"></i>
+                        <h3>YourCoin Rewards</h3>
+                        <p>Earn and tip YourCoin to support creators. Build a vibrant economy where every interaction counts.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <i class="bi bi-people"></i>
+                        <h3>Creator Community</h3>
+                        <p>Join a thriving community of creators and viewers. Share videos, collaborate, and grow your audience.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- my footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 Skyler Spillers. All rights reserved.
+                <a href="contact.html">Contact Us</a> | 
+                <a href="#">Privacy Policy</a> | 
+                <a href="#">Terms of Service</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+</body>
+</html>

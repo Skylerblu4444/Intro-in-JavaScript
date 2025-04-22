@@ -1,0 +1,551 @@
+<!-- Skyler bluue spillers -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YourChannel - Stream & Share</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+    <!-- custom styling that cant be done in the css file -->
+    <style>
+        .search-section {
+            max-width: 600px;
+            margin: 1rem auto;
+            padding: 0 1rem;
+        }
+        .search-section .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 5px rgba(255, 0, 0, 0.3);
+        }
+        .main-content {
+            margin-left: 240px;
+            margin-right: 240px;
+            padding: 2rem;
+            transition: margin-right var(--transition);
+        }
+        .tab-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border: 2px solid var(--primary-color);
+            border-radius: 8px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .tab-btn.active {
+            background: var(--primary-color);
+            color: #fff;
+            font-weight: 700;
+        }
+        .tab-btn:hover {
+            transform: scale(1.05);
+        }
+        .tab-content > div {
+            display: none;
+        }
+        .tab-content > div.active {
+            display: block;
+        }
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .content-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            position: relative;
+            cursor: pointer;
+            contain: content;
+            will-change: contents;
+            display: block;
+        }
+        .content-card .thumbnail-square {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            display: block;
+            background: #ccc url('https://via.placeholder.com/320x180?text=Loading') center/cover;
+        }
+        .creator-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: gold;
+            color: #000;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+        .video-player {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-bottom: 1rem;
+        }
+        .video-player video {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16 / 9;
+        }
+        .video-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .video-actions .btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            transition: transform 0.2s;
+        }
+        .video-actions .btn:hover {
+            transform: scale(1.02);
+        }
+        .video-actions .btn i {
+            font-size: 1.2rem;
+        }
+        .comment-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            margin: 2rem 0;
+            position: relative;
+        }
+        .comment-section .collapse-toggle {
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .comment-section .collapse-toggle:hover {
+            transform: scale(1.02);
+        }
+        .comment-section .comment-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+        }
+        .comment-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        .comment-item .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 1rem;
+        }
+        .load-more-comments {
+            display: block;
+            margin: 1rem auto;
+            padding: 0.5rem 1rem;
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .load-more-comments:hover {
+            transform: scale(1.02);
+        }
+        .progress-bar {
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+        .infinite-scroll-spinner {
+            text-align: center;
+            padding: 2rem;
+            display: none;
+        }
+        .infinite-scroll-spinner.active {
+            display: block;
+        }
+        .load-more-btn {
+            display: block;
+            margin: 2rem auto;
+            padding: 0.75rem 2rem;
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .load-more-btn:hover {
+            transform: scale(1.02);
+        }
+        @media (max-width: 992px) {
+            .main-content {
+                margin-left: 0;
+                margin-right: 0;
+            }
+        }
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            .video-actions {
+                gap: 0.5rem;
+            }
+        }
+        @media (max-width: 576px) {
+            .search-section {
+                max-width: 100%;
+            }
+            .content-card .thumbnail-square {
+                aspect-ratio: 16 / 9;
+            }
+            .tab-nav {
+                flex-direction: column;
+            }
+            .tab-btn {
+                font-size: 1rem;
+                padding: 0.5rem 1rem;
+            }
+            .video-actions .btn {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+            }
+            .video-actions .btn i {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<!--Navbar for the YourChannel page -->
+<body data-page="yourChannel">
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">YourChannel</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="search-bar mx-auto">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search videos, streams, or creators" aria-label="Search content">
+                        <button class="btn btn-primary" type="button" onclick="searchContent()" aria-label="Search"><i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html" aria-current="page"><i class="bi bi-box-arrow-in-right"></i> Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html"><i class="bi bi-envelope"></i> Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="yourchannel.html"><i class="bi bi-play-btn"></i> YourChannel</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.html"><i class="bi bi-person"></i> Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="wallet.html"><i class="bi bi-wallet2"></i> Wallet</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+<!-- sidebar for the YourChannel page -->
+
+    <div class="sidebar collapsed" id="sidebar">
+        <div class="wallet-info" onclick="window.location.href='wallet.html'" aria-label="View wallet details">
+            <i class="bi bi-wallet2 me-2"></i> Balance: <span id="walletBalance">100</span> YRC
+        </div>
+        <div class="sidebar-item" data-bs-toggle="collapse" data-bs-target="#subscriptions">
+            <i class="bi bi-person-plus me-2"></i> Subscriptions
+        </div>
+        <div class="collapse" id="subscriptions">
+            <div class="sidebar-item ms-3">Streamer123</div>
+            <div class="sidebar-item ms-3">CryptoFan456</div>
+        </div>
+        <div class="sidebar-item" data-bs-toggle="collapse" data-bs-target="#watchHistory">
+            <i class="bi bi-clock-history me-2"></i> Watch History
+        </div>
+        <div class="collapse" id="watchHistory">
+            <div class="sidebar-item ms-3">Live Gaming Session</div>
+            <div class="sidebar-item ms-3">Crypto Q&A</div>
+        </div>
+    </div>
+
+    <div class="right-sidebar collapsed" id="rightSidebar">
+        <div class="sidebar-item" data-bs-toggle="modal" data-bs-target="#goLiveModal">
+            <i class="bi bi-broadcast-pin me-2"></i> Go Live
+        </div>
+        <div class="sidebar-item" data-bs-toggle="modal" data-bs-target="#uploadVideoModal">
+            <i class="bi bi-upload me-2"></i> Upload Video
+        </div>
+    </div>
+<!--- main section of the YourChannel page. This is where the video player, search bar, and other content will be displayed.-->
+
+    <br><div class="main-content">
+        <div class="search-section">
+            <div class="input-group">
+                <input type="text" class="form-control" id="searchInput" placeholder="Search videos, streams, or creators" aria-label="Search content">
+                <button class="btn btn-primary" type="button" onclick="searchContent()" aria-label="Search"><i class="bi bi-search"></i></button>
+            </div>
+        </div>
+<!-- watch streak progress bar for rewards -->
+        <div class="progress-bar">
+            <h6>Watch Streak: <span id="watchStreak">3 days. Earn free YourCoin!</span></h6>
+            <div class="progress">
+                <div class="progress-bar bg-danger" role="progressbar" style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+<!-- video player section -->
+        <div class="video-player" id="videoPlayer">
+            <video id="mainVideo" controls poster="https://via.placeholder.com/1280x720?text=Epic+Gaming+Montage">
+                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+<!-- interact with the video player section buttons. This includes liking, disliking, sharing, and tipping the streamer.-->
+        <div class="video-actions">
+            <button class="btn btn-outline-primary" onclick="likeContent(currentVideoId, currentVideoType)" aria-label="Like video">
+                <i class="bi bi-hand-thumbs-up"></i> Like <span id="likeCount">0</span>
+            </button>
+            <button class="btn btn-outline-danger" onclick="dislikeContent(currentVideoId, currentVideoType)" aria-label="Dislike video">
+                <i class="bi bi-hand-thumbs-down"></i> Dislike <span id="dislikeCount">0</span>
+            </button>
+            <button class="btn btn-outline-success" onclick="shareContent(currentVideoId, currentVideoType)" aria-label="Share video">
+                <i class="bi bi-share"></i> Share
+            </button>
+            <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#tipModal" aria-label="Tip YourCoin">
+                <i class="bi bi-coin"></i> Tip YRC
+            </button>
+        </div>
+<!-- tip modal for tipping the streamer. This includes a form for entering the amount to tip and a button to send the tip. -->
+        <div class="modal fade tip-modal" id="tipModal" tabindex="-1" aria-labelledby="tipModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="tipModalLabel">Tip YourCoin</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="tipForm" onsubmit="submitTip(event)">
+                            <div class="mb-3">
+                                <label for="tipAmount" class="form-label">Amount (YRC)</label>
+                                <input type="number" class="form-control" id="tipAmount" min="0.1" step="0.1" placeholder="Enter amount (e.g., 1.5)" required aria-describedby="tipAmountHelp">
+                                <div id="tipAmountHelp" class="form-text">Minimum tip: 0.1 YRC. Your balance: <span id="modalWalletBalance">100</span> YRC.</div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Send Tip</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!-- go live modal for going live on YourChannel. This includes a form for entering the stream title, description, tags, category, thumbnail, and schedule. --->
+        <div class="modal fade" id="goLiveModal" tabindex="-1" aria-labelledby="goLiveModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="goLiveModalLabel">Go Live on YourChannel</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="goLiveForm" onsubmit="goLive(event); return false;">
+                            <div class="mb-3">
+                                <label for="streamTitle" class="form-label">Stream Title</label>
+                                <input type="text" class="form-control" id="streamTitle" required aria-label="Stream title">
+                            </div>
+                            <div class="mb-3">
+                                <label for="streamDescription" class="form-label">Description</label>
+                                <textarea class="form-control" id="streamDescription" rows="4" aria-label="Stream description"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="streamTags" class="form-label">Tags (comma-separated)</label>
+                                <input type="text" class="form-control" id="streamTags" aria-label="Stream tags">
+                            </div>
+                            <div class="mb-3">
+                                <label for="streamCategory" class="form-label">Category</label>
+                                <select class="form-control" id="streamCategory" required aria-label="Stream category">
+                                    <option value="gaming">Gaming</option>
+                                    <option value="crypto">Crypto</option>
+                                    <option value="tutorial">Tutorial</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="streamThumbnail" class="form-label">Thumbnail</label>
+                                <input type="file" class="form-control" id="streamThumbnail" accept="image/*" aria-label="Upload thumbnail">
+                                <img src="https://via.placeholder.com/320x180?text=Thumbnail" alt="Thumbnail Preview" class="mt-2" id="streamThumbnailPreview" width="100%">
+                            </div>
+                            <div class="mb-3">
+                                <label for="streamSchedule" class="form-label">Schedule (Optional)</label>
+                                <input type="datetime-local" class="form-control" id="streamSchedule" aria-label="Stream schedule">
+                            </div>
+                            <div id="goLiveError" class="alert alert-danger d-none" role="alert"></div>
+                            <button type="submit" class="btn btn-primary w-100">Go Live</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!-- upload video modal for uploading a video to YourChannel. This includes a form for entering the video title, description, tags, category, file, and thumbnail. -->
+        <div class="modal fade" id="uploadVideoModal" tabindex="-1" aria-labelledby="uploadVideoModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="uploadVideoModalLabel">Upload YourChannel Video</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="uploadVideoForm" onsubmit="uploadVideo(event); return false;">
+                            <div class="mb-3">
+                                <label for="videoTitle" class="form-label">Title</label>
+                                <input type="text" class="form-control" id="videoTitle" required aria-label="Video title">
+                            </div>
+                            <div class="mb-3">
+                                <label for="videoDescription" class="form-label">Description</label>
+                                <textarea class="form-control" id="videoDescription" rows="4" aria-label="Video description"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="videoTags" class="form-label">Tags (comma-separated)</label>
+                                <input type="text" class="form-control" id="videoTags" aria-label="Video tags">
+                            </div>
+                            <div class="mb-3">
+                                <label for="videoCategory" class="form-label">Category</label>
+                                <select class="form-control" id="videoCategory" required aria-label="Video category">
+                                    <option value="gaming">Gaming</option>
+                                    <option value="crypto">Crypto</option>
+                                    <option value="tutorial">Tutorial</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="videoFile" class="form-label">Video File</label>
+                                <input type="file" class="form-control" id="videoFile" accept="video/*" required aria-label="Upload video file">
+                            </div>
+                            <div class="mb-3">
+                                <label for="videoThumbnail" class="form-label">Thumbnail</label>
+                                <input type="file" class="form-control" id="videoThumbnail" accept="image/*" aria-label="Upload thumbnail">
+                                <img src="https://via.placeholder.com/320x180?text=Thumbnail" alt="Thumbnail Preview" class="mt-2" id="videoThumbnailPreview" width="100%">
+                            </div>
+                            <div id="uploadVideoError" class="alert alert-danger d-none" role="alert"></div>
+                            <button type="submit" class="btn btn-primary w-100">Upload Video</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!-- comment section for the video player. This includes a button to collapse the comments, a list of comments, and an input field for adding new comments. -->
+        <div class="comment-section" role="region" aria-labelledby="commentSectionLabel">
+            <h3 id="commentSectionLabel">Comments</h3>
+            <button class="collapse-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#commentContent" aria-expanded="true" aria-controls="commentContent">Hide Comments</button>
+            <div class="collapse show" id="commentContent">
+                <div class="comment-list" id="commentList"></div>
+                <button class="load-more-comments" onclick="loadMoreComments()" aria-label="Load more comments">Load More Comments</button>
+                <div class="comment-input">
+                    <form onsubmit="addComment(); return false;">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="commentInput" placeholder="Add a comment" aria-label="Comment input">
+                            <button type="submit" class="btn btn-primary">Comment</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+<!-- trending and recommended live streams section. This includes tabs for different categories of live streams. -->
+        <div class="tabbed-content">
+            <nav class="tab-nav" role="tablist">
+                <button class="tab-btn active" id="trendingLivesTab" onclick="switchTab('trendingLives')" role="tab" aria-controls="trendingLivesContent" aria-selected="true"><i class="bi bi-broadcast me-2"></i>Trending Live</button>
+                <button class="tab-btn" id="trendingYourChannelTab" onclick="switchTab('trendingYourChannel')" role="tab" aria-controls="trendingYourChannelContent" aria-selected="false"><i class="bi bi-play-btn me-2"></i>Trending YourChannel</button>
+                <button class="tab-btn" id="recommendedLivesTab" onclick="switchTab('recommendedLives')" role="tab" aria-controls="recommendedLivesContent" aria-selected="false"><i class="bi bi-broadcast me-2"></i>Recommended Live</button>
+                <button class="tab-btn" id="recommendedYourChannelTab" onclick="switchTab('recommendedYourChannel')" role="tab" aria-controls="recommendedYourChannelContent" aria-selected="false"><i class="bi bi-play-btn me-2"></i>Recommended YourChannel</button>
+            </nav>
+            <div class="tab-content">
+                <div id="trendingLivesContent" class="active">
+                    <div class="content-grid" id="trendingLivesGrid"></div>
+                    <div class="infinite-scroll-spinner">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <button class="load-more-btn" onclick="loadMore('trendingLivesGrid')">Load More</button>
+                </div>
+                <div id="trendingYourChannelContent">
+                    <div class="content-grid" id="trendingYourChannelGrid"></div>
+                    <div class="infinite-scroll-spinner">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <button class="load-more-btn" onclick="loadMore('trendingYourChannelGrid')">Load More</button>
+                </div>
+                <div id="recommendedLivesContent">
+                    <div class="content-grid" id="recommendedLivesGrid"></div>
+                    <div class="infinite-scroll-spinner">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <button class="load-more-btn" onclick="loadMore('recommendedLivesGrid')">Load More</button>
+                </div>
+                <div id="recommendedYourChannelContent">
+                    <div class="content-grid" id="recommendedYourChannelGrid"></div>
+                    <div class="infinite-scroll-spinner">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <button class="load-more-btn" onclick="loadMore('recommendedYourChannelGrid')">Load More</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- notification toast for displaying messages to the user. This includes a close button and a message area. -->
+    <div class="toast-container">
+        <div id="notificationToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Notification</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body"></div>
+        </div>
+    </div>
+<!-- my footer -->
+        <footer class="footer">
+            <div class="container">
+                <p>© 2025 Skyler Spillers. All rights reserved.
+                    <a href="contact.html">Contact Us</a> | 
+                    <a href="#">Privacy Policy</a> | 
+                    <a href="#">Terms of Service</a>
+                </p>
+            </div>
+        </footer>
+
+</body>
+</html>
